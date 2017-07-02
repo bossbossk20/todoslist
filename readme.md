@@ -3,7 +3,7 @@
 
 #### install
 ```
-	$ npm install 
+  $ npm install 
 ```
 #### run
 ```
