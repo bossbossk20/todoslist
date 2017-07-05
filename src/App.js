@@ -10,10 +10,18 @@ export default class App extends Component {
   }
 
   componentDidMount = () => {
-    let todos = JSON.parse(localStorage.getItem('todos'))
-    this.setState({
-      todos: todos
-    })
+    // console.log(localStorage.getItem('todos'))
+    if (!localStorage.getItem('todos')) {
+      console.log('not')
+      this.setState({
+        todos: []
+      })
+    } else {
+      let todos = JSON.parse(localStorage.getItem('todos'))
+      this.setState({
+        todos: todos
+      })
+    }
   }
 
   handdleChangeAdd = (e) => {
