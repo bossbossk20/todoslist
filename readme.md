@@ -9,4 +9,5 @@
 ```
   $ npm start
 ```
-[![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard) 
+
+[![Build Status](https://travis-ci.org/bossbossk20/todoslist.svg?branch=master)](https://travis-ci.org/bossbossk20/todoslist)
