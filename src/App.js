@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import db from './firebase'
 
 export default class App extends Component {
   state = {
@@ -10,18 +11,11 @@ export default class App extends Component {
   }
 
   componentDidMount = () => {
-    // console.log(localStorage.getItem('todos'))
-    if (!localStorage.getItem('todos')) {
-      console.log('not')
+    db.ref('todos').on('child_added', data => {
       this.setState({
-        todos: []
+        todos: [ ...this.state.todos, { id: data.key,  name: data.val().name, completed: data.val().completed }]
       })
-    } else {
-      let todos = JSON.parse(localStorage.getItem('todos'))
-      this.setState({
-        todos: todos
-      })
-    }
+    })
   }
 
   handdleChangeAdd = (e) => {
@@ -31,27 +25,29 @@ export default class App extends Component {
   }
   hanndleClickAdd = () => {
     let todos = [ ...this.state.todos, { name: this.state.todo, completed: false }  ]
-    localStorage.setItem('todos', JSON.stringify(todos))
+    db.ref(`todos/${Date.now()}`).set({ name: this.state.todo, completed: false })
     this.setState({
       todos: todos,
       todo: '',
     })
   }
-  handdleDelete = (index) => {
+  handdleDelete = (index, id) => {
+    console.log(id)
+    db.ref(`todos/${id}`).remove()
     let todos = this.state.todos
     todos.splice(index, 1)
     this.setState({
       todos: todos
     })
-    localStorage.setItem('todos', JSON.stringify(todos))
   }
 
-  showEdit = (todo, index) => {
+  showEdit = (todo, index, id) => {
     console.log(`todo and index ${todo} ${index}`)
     this.setState({
       edit: true,
       editTodo: todo,
-      editIndex: index
+      editIndex: index,
+      editId: id
     })
   }
   handdleChangeEdit = (e) => {
@@ -61,22 +57,21 @@ export default class App extends Component {
   }
   handdleClickEdit = () => {
     let todos = this.state.todos
-    let { editTodo, editIndex} = this.state
+    let { editTodo, editIndex, editId} = this.state
     todos[editIndex].name = editTodo
+    db.ref(`todos/${editId}`).update({ id:editId, name: editTodo, completed: false})
     this.setState({
       todos: todos,
       edit: false
     })
-    localStorage.setItem('todos', JSON.stringify(todos))
   }
-  handdleCompleted = (index) => {
+  handdleCompleted = (index, todo) => {
     let todos = this.state.todos
     todos[index].completed = true
-    todos[index].color = 'green'
+    db.ref(`todos/${todo.id}`).update({ id: todo.id, name: todo.name, completed: true  })
     this.setState({
       todos: todos
     })
-    localStorage.setItem('todos', JSON.stringify(todos))
   }
   render () {
     let { todos, edit, editTodo } = this.state
@@ -100,9 +95,9 @@ export default class App extends Component {
                   <span style={{paddingRight:'20px'}}>
                     {todo.name}
                   </span>
-                  <button onClick={ () => this.handdleDelete(index) }>delete</button>
-                  <button onClick={ () => this.showEdit(todo, index) } >edit</button>
-                  <button onClick={ () => this.handdleCompleted(index) } >completed</button>
+                  <button onClick={ () => this.handdleDelete(index,todo.id) }>delete</button>
+                  <button onClick={ () => this.showEdit(todo, index, todo.id) } >edit</button>
+                  <button onClick={ () => this.handdleCompleted(index, todo) } >completed</button>
                 </div>
               ))
           }
