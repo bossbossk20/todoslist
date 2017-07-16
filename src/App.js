@@ -68,8 +68,7 @@ export default class App extends Component {
   handdleCompleted = (index, todo) => {
     let todos = this.state.todos
     todos[index].completed = true
-    todos[index].color = 'green'
-    db.ref(`todos/${todo.id}`).update({ id: todo.id, name: todo.name, completed: true, color: 'green'  })
+    db.ref(`todos/${todo.id}`).update({ id: todo.id, name: todo.name, completed: true  })
     this.setState({
       todos: todos
     })
