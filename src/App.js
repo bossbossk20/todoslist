@@ -9,21 +9,6 @@ export default class App extends Component {
     editTodo: ''
   }
 
-  componentDidMount = () => {
-    // console.log(localStorage.getItem('todos'))
-    if (!localStorage.getItem('todos')) {
-      console.log('not')
-      this.setState({
-        todos: []
-      })
-    } else {
-      let todos = JSON.parse(localStorage.getItem('todos'))
-      this.setState({
-        todos: todos
-      })
-    }
-  }
-
   handdleChangeAdd = (e) => {
     this.setState({
       todo: e.target.value
@@ -31,10 +16,9 @@ export default class App extends Component {
   }
   hanndleClickAdd = () => {
     let todos = [ ...this.state.todos, { name: this.state.todo, completed: false }  ]
-    localStorage.setItem('todos', JSON.stringify(todos))
     this.setState({
       todos: todos,
-      todo: '',
+      todo: ''
     })
   }
   handdleDelete = (index) => {
@@ -43,11 +27,9 @@ export default class App extends Component {
     this.setState({
       todos: todos
     })
-    localStorage.setItem('todos', JSON.stringify(todos))
   }
 
   showEdit = (todo, index) => {
-    console.log(`todo and index ${todo} ${index}`)
     this.setState({
       edit: true,
       editTodo: todo,
@@ -67,7 +49,6 @@ export default class App extends Component {
       todos: todos,
       edit: false
     })
-    localStorage.setItem('todos', JSON.stringify(todos))
   }
   handdleCompleted = (index) => {
     let todos = this.state.todos
@@ -76,7 +57,6 @@ export default class App extends Component {
     this.setState({
       todos: todos
     })
-    localStorage.setItem('todos', JSON.stringify(todos))
   }
   render () {
     let { todos, edit, editTodo } = this.state
