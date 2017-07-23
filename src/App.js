@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 export default class App extends Component {
   state = {
     todo: '',
-    todos: [],
     edit: false,
     editIndex: 0,
     editTodo: ''
@@ -15,11 +14,7 @@ export default class App extends Component {
     })
   }
   hanndleClickAdd = () => {
-    let todos = [ ...this.state.todos, { name: this.state.todo, completed: false }  ]
-    this.setState({
-      todos: todos,
-      todo: ''
-    })
+    this.props.addTodo(this.state.todo)
   }
   handdleDelete = (index) => {
     let todos = this.state.todos
@@ -50,17 +45,10 @@ export default class App extends Component {
       edit: false
     })
   }
-  handdleCompleted = (index) => {
-    let todos = this.state.todos
-    todos[index].completed = true
-    todos[index].color = 'green'
-    this.setState({
-      todos: todos
-    })
-  }
+  handdleCompleted = (index) => {}
   render () {
-    console.log(this.props)
-    let { todos, edit, editTodo } = this.state
+    let { edit, editTodo } = this.state
+    let todos = this.props.todo
     let remaining = todos.filter(todo => !todo.completed).length
     return (
       <center>
