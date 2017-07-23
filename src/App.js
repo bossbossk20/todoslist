@@ -59,6 +59,7 @@ export default class App extends Component {
     })
   }
   render () {
+    console.log(this.props)
     let { todos, edit, editTodo } = this.state
     let remaining = todos.filter(todo => !todo.completed).length
     return (
