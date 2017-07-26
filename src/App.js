@@ -17,11 +17,7 @@ export default class App extends Component {
     this.props.addTodo(this.state.todo)
   }
   handdleDelete = (index) => {
-    let todos = this.state.todos
-    todos.splice(index, 1)
-    this.setState({
-      todos: todos
-    })
+    this.props.deleteTodo(index)
   }
 
   showEdit = (todo, index) => {
